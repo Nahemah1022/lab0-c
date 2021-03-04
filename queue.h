@@ -25,10 +25,17 @@ typedef struct ELE {
 /* Queue structure */
 typedef struct {
     list_ele_t *head; /* Linked list of elements */
+    list_ele_t *tail;
     int size;
 } queue_t;
 
 /* Operations on queue */
+
+/*
+ * Create empty node.
+ * Return NULL if could not allocate space.
+ */
+bool create_node(list_ele_t **newh, char *s);
 
 /*
  * Create empty queue.
