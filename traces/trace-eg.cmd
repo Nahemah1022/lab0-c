@@ -1,22 +1,13 @@
-
-# Demonstration of queue testing framework
-# Use help command to see list of commands and options
-# Initial queue is NULL.
-show
-# Create empty queue
 new
-# Fill it with some values.  First at the head
-ih dolphin
-ih bear
-ih gerbil
-# Now at the tail
-it meerkat
-it bear
-# Reverse it
-reverse
-# See how long it is
-size
-# Delete queue.  Goes back to a NULL queue.
+it 4
+it 2
+it 5
+it 3
+it 1
+it 7
+it 8
+it 9
+it 6
+sort
 free
-# Exit program
 quit

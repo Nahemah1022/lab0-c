@@ -183,43 +183,47 @@ void q_sort(queue_t *q)
 
     char *pivot;
     int i = 0;
-    list_ele_t *beg[q->size], *end[q->size];
-    list_ele_t *l, *r, *pr;
+    list_ele_t *beg[q->size + 1], *end[q->size + 1], *junc = NULL;
+    for (int j = 0; j <= q->size; ++j) {
+        beg[j] = NULL;
+        end[j] = NULL;
+    }
     beg[0] = q->head;
     end[0] = q->tail;
     while (i >= 0) {
-        l = beg[i];
-        r = end[i];
-        if (l && r && l != r) {
-            pivot = l->value;
-            while (l != r) {
-                pr = r = l;
-                while (pr != end[i]) {  // find the last one smaller than pivot
-                    pr = pr->next;
-                    if (strcasecmp(pr->value, pivot) < 0)
-                        r = pr;
-                }
-
-                if (r != l) {  // found
-                    l->value = r->value;
-                    l = l->next;
-                }
-
-                while (strcasecmp(l->value, pivot) <= 0 &&
-                       l != r) {  // find the first one bigger than pivot
-                    l = l->next;
-                }
-
-                if (l != r) {
-                    r->value = l->value;
+        list_ele_t *lh = beg[i], *rh = beg[i], *lt = beg[i], *rt = beg[i];
+        if (beg[i] != end[i]) {
+            pivot = beg[i]->value;
+            list_ele_t *p = beg[i];
+            while (p != end[i]) {
+                p = p->next;
+                if (strcasecmp(p->value, pivot) < 0) {
+                    lt = (lh != beg[i]) ? (lt->next = p) : (lh = p);
+                } else {
+                    rt = (rh != beg[i]) ? (rt->next = p) : (rh = p);
                 }
             }
-            l->value = pivot;
-            beg[i + 1] = l->next;
-            end[i + 1] = end[i];
-            end[i++] = l;
+            lt->next = beg[i];
+            beg[i]->next = rh;
+            rt->next = NULL;
+
+            beg[i + 1] = beg[i];
+            end[i + 1] = beg[i];
+            beg[i] = lh;
+            end[i] = lt;
+            beg[i + 2] = rh;
+            end[i + 2] = rt;
+            i += 2;
         } else {
+            if (beg[i] != junc)
+                beg[i]->next = junc;
+            junc = beg[i];
             i--;
         }
     }
+    list_ele_t *ptr;
+    for (ptr = beg[0]; ptr->next; ptr = ptr->next)
+        ;
+    q->head = beg[0];
+    q->tail = ptr;
 }
