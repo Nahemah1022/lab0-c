@@ -92,6 +92,8 @@ int q_size(queue_t *q);
  */
 void q_reverse(queue_t *q);
 
+void merge_sort(list_ele_t **list);
+
 /*
  * Sort elements of queue in ascending order
  * No effect if q is NULL or empty. In addition, if q has only one
