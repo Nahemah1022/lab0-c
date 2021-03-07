@@ -45,10 +45,15 @@ void init_cmd();
 void add_cmd(char *name, cmd_function operation, char *documentation);
 
 /* Add a new parameter */
-void add_param(char *name,
-               int *valp,
-               char *doccumentation,
-               setter_function setter);
+void add_int_param(char *name,
+                   int *valp,
+                   char *doccumentation,
+                   setter_function setter);
+
+void add_bool_param(char *name,
+                    bool *valp,
+                    char *doccumentation,
+                    setter_function setter);
 
 /* Extract integer from text and store at loc */
 bool get_int(char *vname, int *loc);

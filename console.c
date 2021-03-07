@@ -101,11 +101,11 @@ void init_cmd()
     add_cmd("log", do_log_cmd, " file           | Copy output to file");
     add_cmd("time", do_time_cmd, " cmd arg ...    | Time command execution");
     add_cmd("#", do_comment_cmd, " ...            | Display comment");
-    add_param("simulation", (int *) &simulation, "Start/Stop simulation mode",
-              NULL);
-    add_param("verbose", &verblevel, "Verbosity level", NULL);
-    add_param("error", &err_limit, "Number of errors until exit", NULL);
-    add_param("echo", (int *) &echo, "Do/don't echo commands", NULL);
+    add_bool_param("simulation", &simulation, "Start/Stop simulation mode",
+                   NULL);
+    add_int_param("verbose", &verblevel, "Verbosity level", NULL);
+    add_int_param("error", &err_limit, "Number of errors until exit", NULL);
+    add_bool_param("echo", &echo, "Do/don't echo commands", NULL);
 
     init_in();
     init_time(&last_time);
@@ -131,10 +131,10 @@ void add_cmd(char *name, cmd_function operation, char *documentation)
 }
 
 /* Add a new parameter */
-void add_param(char *name,
-               int *valp,
-               char *documentation,
-               setter_function setter)
+void add_int_param(char *name,
+                   int *valp,
+                   char *documentation,
+                   setter_function setter)
 {
     param_ptr next_param = param_list;
     param_ptr *last_loc = &param_list;
@@ -143,9 +143,33 @@ void add_param(char *name,
         next_param = next_param->next;
     }
 
-    param_ptr ele = (param_ptr) malloc_or_fail(sizeof(param_ele), "add_param");
+    param_ptr ele =
+        (param_ptr) malloc_or_fail(sizeof(param_ele), "add_int_param");
     ele->name = name;
     ele->valp = valp;
+    ele->documentation = documentation;
+    ele->setter = setter;
+    ele->next = next_param;
+    *last_loc = ele;
+}
+
+void add_bool_param(char *name,
+                    bool *valp,
+                    char *documentation,
+                    setter_function setter)
+{
+    param_ptr next_param = param_list;
+    param_ptr *last_loc = &param_list;
+    while (next_param && strcmp(name, next_param->name) > 0) {
+        last_loc = &next_param->next;
+        next_param = next_param->next;
+    }
+
+    param_ptr ele =
+        (param_ptr) malloc_or_fail(sizeof(param_ele), "add_bool_param");
+    ele->name = name;
+    ele->valp = (int *) malloc_or_fail(sizeof(int), "add_bool_param");
+    *(ele->valp) = valp ? 1 : 0;
     ele->documentation = documentation;
     ele->setter = setter;
     ele->next = next_param;
