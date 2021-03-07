@@ -31,7 +31,6 @@ bool create_node(list_ele_t **newh, char *s)
 queue_t *q_new()
 {
     queue_t *q = malloc(sizeof(queue_t));
-    /* TODO: What if malloc returned NULL? */
     if (!q) {
         return NULL;
     }
@@ -44,7 +43,6 @@ queue_t *q_new()
 /* Free all storage used by queue */
 void q_free(queue_t *q)
 {
-    /* TODO: How about freeing the list elements and the strings? */
     if (q) {
         list_ele_t *e = q->head;
         while (e) {
@@ -53,7 +51,6 @@ void q_free(queue_t *q)
             free(e);
             e = n;
         }
-        /* Free queue structure */
         free(q);
     }
 }
@@ -68,11 +65,8 @@ void q_free(queue_t *q)
 bool q_insert_head(queue_t *q, char *s)
 {
     list_ele_t *newh;
-    /* TODO: What should you do if the q is NULL? */
     if (!q || !create_node(&newh, s))
         return false;
-    /* Don't forget to allocate space for the string and copy it */
-    /* What if either call to malloc returns NULL? */
     newh->next = q->head;
     q->head = newh;
     if (!((q->size)++))
@@ -90,12 +84,8 @@ bool q_insert_head(queue_t *q, char *s)
 bool q_insert_tail(queue_t *q, char *s)
 {
     list_ele_t *newh;
-    /* TODO: You need to write the complete code for this function */
-    /* Remember: It should operate in O(1) time */
-    /* TODO: Remove the above comment when you are about to implement. */
     if (!q || !create_node(&newh, s))
         return false;
-    /* Don't forget to allocate space for the string and copy it */
     if ((q->size)++) {
         q->tail->next = newh;
     } else {
